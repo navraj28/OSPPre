@@ -124,5 +124,9 @@ class TestDependencyParser(unittest.TestCase):
         self.assertEqual( coreIssues[2] , "battery needs replacement")
         self.assertEqual( len(coreIssues) , 3)
 
+        coreIssues = getCoreIssues("I was throwing up all night")
+        self.assertEqual( coreIssues[0] , "I throwing up")
+        self.assertEqual( len(coreIssues) , 1)
+
 if __name__ == '__main__': 
     unittest.main() 

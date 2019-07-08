@@ -46,6 +46,7 @@ def getCoreIssues(text):
     rootWords = []
     phrasalVerbs = {} 
     compoundsTracker = {}
+    prt = []
     significantTokensFound = False 
     doc = nlp(text)
     for token in doc:
@@ -54,6 +55,7 @@ def getCoreIssues(text):
             
         if token.dep_ == "prt" and token.head.pos_ == "VERB" :
             phrasalVerbs[token.head.text] = token.head.text + " " + token.text
+            prt.append(token)
             significantTokensFound = True
 
         if token.dep_ in ["nsubj", "nsubjpass", "nmod", "acl"]:
@@ -154,7 +156,13 @@ def getCoreIssues(text):
             if token.head == acompToken.head: 
                 intermediateStr = intermediateStr + " " + acompToken.text
                 amod.remove(acompToken)
-                
+
+        #Add PRT (Phrasal Verbs), if associated with the Subject
+        for phrasalVerb in prt:
+            if token.head == phrasalVerb.head: 
+                intermediateStr = intermediateStr + " " + phrasalVerb.text
+                prt.remove(phrasalVerb)
+
         outputs.append(intermediateStr)
 
     #Process any standalone DirectObject nodes

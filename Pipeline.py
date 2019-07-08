@@ -2,6 +2,7 @@ from USE import get_features, cosineSimilarity
 from DependencyParser import getCoreIssues
 
 import pandas
+import csv
 
 def mapSymptomsToRootSymptoms(masterList, wo):    
     for symptom in wo.originalSymptoms:
@@ -48,8 +49,18 @@ def getUniqueSymptoms(data_processed):
 
     return masterList
 
+def getSymptomIdForeignKey(rootSymptom, rootSymptoms):
+    for row in rootSymptoms:
+        if row[4] == rootSymptom:
+            return row[3]
+    return -1
+        
+
 class WorkOrder:
-    def __init__(self, workOrderId, problemDescription):
+    def __init__(self, manufacturer, productFamily, productLine, workOrderId, problemDescription):
+        self.manufacturer = manufacturer
+        self.productFamily = productFamily
+        self.productLine = productLine
         self.workOrderId = workOrderId
         self.problemDescription = problemDescription
         self.originalSymptoms = getCoreIssues(problemDescription)
@@ -61,7 +72,7 @@ class PipelineFacade:
         self.WOs = []
         input = pandas.read_csv(fileName)
         for index, row in input.iterrows():
-            self.WOs.append( WorkOrder(row['ID'], row['Description']) )
+            self.WOs.append( WorkOrder(row['Manufacturer'], row['ProductFamily'], row['ProductLine'], row['ID'], row['Description']) )
         
     def processWOs(self):
         allSymptoms = []
@@ -71,3 +82,40 @@ class PipelineFacade:
         for wo in self.WOs:
             mapSymptomsToRootSymptoms(masterList, wo)
             print(wo.workOrderId, " ", wo.rootSymptoms)
+
+        #Write the Master Symptom List to CSV
+        rootSymptoms = []
+        for index, key in enumerate(masterList):
+            row = []
+            row.append( self.WOs[0].manufacturer)
+            row.append( self.WOs[0].productFamily)
+            row.append( self.WOs[0].productLine)
+            row.append(index)
+            row.append(key)
+            row.append("ToDo")
+            array = masterList.get(key)
+            row.append( array )
+            rootSymptoms.append(row)
+
+        with open('C:\\SAM\\data\\UnitTests\\MasterList.csv', 'w') as writeFile:
+            writer = csv.writer(writeFile)
+            writer.writerow(["Manufacturer", "ProductFamily", "ProductLine", "SymptomId", "SymptomText", "SymptomQuestion","DuplicateSymptomsList"])
+            writer.writerows(rootSymptoms)
+        writeFile.close()
+
+        #Write the WO-Root Symptom Co-Occurence CSV. Parts will get appended later
+        rows = []
+        for wo in self.WOs:
+            for rootSymptom in wo.rootSymptoms:
+                row = []
+                row.append( wo.manufacturer)
+                row.append( wo.productFamily)
+                row.append( wo.productLine)
+                row.append( wo.workOrderId)
+                row.append( getSymptomIdForeignKey(rootSymptom, rootSymptoms))
+                rows.append(row)
+
+        with open('C:\\SAM\\data\\UnitTests\\WOsAndSymptoms.csv', 'w') as writeFile:
+            writer = csv.writer(writeFile)
+            writer.writerows(rows)
+        writeFile.close()
