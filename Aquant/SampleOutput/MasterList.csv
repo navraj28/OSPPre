@@ -1,0 +1,6 @@
+Manufacturer,ProductFamily,ProductLine,SymptomId,SymptomText,SymptomQuestion,DuplicateSymptomsList
+Manufacturer,ProductFamily,ProductLine,0,Radiator leaking,ToDo,"['Radiator leaking', 'Radiator leaking']"
+Manufacturer,ProductFamily,ProductLine,1,Water leaking over,ToDo,['Water leaking']
+Manufacturer,ProductFamily,ProductLine,2,Compressor is jammed,ToDo,"['Compressor not starting', 'Compressor has issue', 'Compressor is jammed', 'Compressor is jammed', 'Compressor not starting']"
+Manufacturer,ProductFamily,ProductLine,3,Battery is dead,ToDo,"['battery needs replaced', 'battery is dead', 'battery is dead', 'battery needs replacement']"
+Manufacturer,ProductFamily,ProductLine,4,Radiator vibrating,ToDo,[]
