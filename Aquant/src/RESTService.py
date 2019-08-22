@@ -62,7 +62,6 @@ def predictPartsGivenSymptoms():
     content = request.get_json()
     x = json2obj(request.data)
 
-    print(x.SymptomsThatArePresent, type(x.SymptomsThatArePresent))
     #TODO Change WO Constructor
     workOrder = WorkOrder('Manufacturer', 'ProductFamily', 'ProductLine', 'ID', '')
     workOrder.rootSymptomIds = x.SymptomsThatArePresent
