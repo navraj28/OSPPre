@@ -1,0 +1,1 @@
+conda env export > C:\Aquant\environment.yml
