@@ -1,9 +1,12 @@
-from USE import get_features, cosineSimilarity
+#from USE import get_features, cosineSimilarity
+from USEWithPlaceHolders import get_features, cosineSimilarity
 from DependencyParser import getCoreIssues
 from Objects import WorkOrder, RootSymptom, THRESHOLD, PartsRecommendation
 from SQLHelper import fetchRootSymptomsFromDB, getPartsPredictiction
 import pandas
 import csv
+import numpy as np
+import json
 
 def mapSymptomsToRootSymptoms(masterList, wo):    
     for symptom in wo.originalSymptoms:
@@ -49,7 +52,7 @@ def getUniqueSymptoms(data_processed):
         if not alreadyTracked(masterList, val):
             masterList[val] = duplicateSymptoms
 
-    return masterList
+    return masterList, BASE_VECTORS
 
 def getSymptomIdForeignKey(rootSymptom, rootSymptoms):
     for row in rootSymptoms:
@@ -69,7 +72,7 @@ class PipelineFacade:
         allSymptoms = []
         for wo in self.WOs:
             allSymptoms.extend( wo.originalSymptoms)
-        masterList = getUniqueSymptoms(allSymptoms)
+        masterList, BASE_VECTORS = getUniqueSymptoms(allSymptoms)
         for wo in self.WOs:
             mapSymptomsToRootSymptoms(masterList, wo)
             print(wo.workOrderId, " ", wo.rootSymptoms)
@@ -86,11 +89,18 @@ class PipelineFacade:
             row.append("ToDo")
             array = masterList.get(key)
             row.append( array )
+            #Store the Vector Value as-well
+            for ind2, symp in enumerate(allSymptoms):
+                if symp == key:
+#                    vecAsString = np.ndarray.dumps( BASE_VECTORS[ind2] )
+                    vecAsString = json.dumps(BASE_VECTORS[ind2].tolist())
+                    row.append( vecAsString )
+                    break
             rootSymptoms.append(row)
 
-        with open('C:\\SAM\\data\\UnitTests\\MasterList.csv', 'w') as writeFile:
+        with open('C:\\SAM\\data\\UnitTests\\MasterList.csv', 'w', newline='') as writeFile:
             writer = csv.writer(writeFile)
-            writer.writerow(["Manufacturer", "ProductFamily", "ProductLine", "SymptomId", "SymptomText", "SymptomQuestion","DuplicateSymptomsList"])
+            writer.writerow(["Manufacturer", "ProductFamily", "ProductLine", "SymptomId", "SymptomText", "SymptomQuestion","DuplicateSymptomsList", "VectorForm"])
             writer.writerows(rootSymptoms)
         writeFile.close()
 
@@ -106,7 +116,7 @@ class PipelineFacade:
                 row.append( getSymptomIdForeignKey(rootSymptom, rootSymptoms))
                 rows.append(row)
 
-        with open('C:\\SAM\\data\\UnitTests\\WOsAndSymptoms.csv', 'w') as writeFile:
+        with open('C:\\SAM\\data\\UnitTests\\WOsAndSymptoms.csv', 'w', newline='') as writeFile:
             writer = csv.writer(writeFile)
             writer.writerows(rows)
         writeFile.close()
@@ -126,5 +136,3 @@ def fromProblemDescriptionToPartsPrediction(workOrder):
         print('Part No. ' + str(part.partId) + ' ' + part.partName + ' Quantity ' + str(part.numberOfParts) + ' PROBABLITY ' + str(part.probablityPercentage) + "%")
     return pred
     
-workOrder = WorkOrder('Manufacturer', 'ProductFamily', 'ProductLine', 'ID', 'Radiator is leaking and the battery needs to be replaced')
-pred = fromProblemDescriptionToPartsPrediction(workOrder)

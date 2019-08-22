@@ -22,7 +22,7 @@ def fetchRootSymptomsFromDB():
     cursor.execute("select * from master_symptoms")
     result = cursor.fetchall()
     for row in result:
-        rootSymptoms.append( RootSymptom(row[0], row[1], row[2], row[3]) )
+        rootSymptoms.append( RootSymptom(row[0], row[1], row[2], row[3], row[4]) )
     return rootSymptoms
 
 #Given a set of Symptoms, return the PartId & Num of WOs that it appeared in.
@@ -104,7 +104,6 @@ def buildPartsQuery(workOrder):
     result = cursor.fetchall()
     results = []
     for row in result:
-        print( row[0], row[1] )
         results.append( PartsByWorkOrder(row[0], row[1], row[2], row[3]) )
     return results
 

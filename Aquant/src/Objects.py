@@ -1,5 +1,7 @@
-from USE import get_features, cosineSimilarity
+#from USE import get_features, cosineSimilarity
+from USEWithPlaceHolders import get_features, cosineSimilarity
 from DependencyParser import getCoreIssues
+import numpy, json
 
 THRESHOLD = 0.84
 
@@ -37,12 +39,17 @@ class WorkOrder:
         self.rootSymptomIdsNotPresent.remove(symptomId)
 
 class RootSymptom:
-    def __init__(self, productId, symptomId, symptomText, symptomQuestion):
+    def __init__(self, productId, symptomId, symptomText, symptomQuestion, vector):
         self.productId = productId
         self.symptomId = symptomId
         self.symptomText = symptomText
         self.symptomQuestion = symptomQuestion
-        self.textVectorForm = get_features( [symptomText] )
+#        if vector is None:
+#            self.textVectorForm = get_features( [symptomText] )
+#        else:
+#            self.textVectorForm = numpy.array(json.loads(vector))
+#        self.textVectorForm = get_features( [symptomText] )
+        self.textVectorForm = numpy.array(json.loads(vector)).reshape(1 , 512)
 
 class PartsRecommendation:
     def __init__(self, partId, partName, probablityPercentage, numberOfParts):

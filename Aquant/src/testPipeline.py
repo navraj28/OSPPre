@@ -3,16 +3,18 @@ import pandas
 
 from Pipeline import getUniqueSymptoms, fromProblemDescriptionToPartsPrediction, PipelineFacade
 from Objects import WorkOrder, RootSymptom, PartsRecommendation
+from USEWithPlaceHolders import init
 
 class TestPipeline(unittest.TestCase): 
       
     def setUp(self): 
+        init()
         pass
 
     def test_UniqueSymptoms(self): 
         input = pandas.read_csv('C:\\SAM\\data\\UnitTests\\UnitTestUniqueSymptoms.csv')
         data_processed = input['Symptoms'].values
-        masterList = getUniqueSymptoms(data_processed)
+        masterList, BASE_VECTORS = getUniqueSymptoms(data_processed)
         print("Set of Unique Symptoms ", masterList.keys())
         self.assertEqual( len(masterList.keys()) , 5)
         self.assertTrue( "Radiator leaking" in masterList)
@@ -101,6 +103,8 @@ class TestPipeline(unittest.TestCase):
                 self.assertTrue(part.probablityPercentage == 100)
             else:
                 self.assertFalse(True)
+            
+            print(part.partName, part.probablityPercentage, "%, # of parts ", part.numberOfParts)
 
 if __name__ == '__main__': 
     unittest.main() 

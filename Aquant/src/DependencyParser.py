@@ -54,7 +54,7 @@ def getCoreIssues(text):
         if token.dep_ == "ROOT" and token.text == token.head.text:
             rootWords.append(token)
             
-        if token.pos_ == "PROPN":
+        if token.pos_ in ["PROPN"]:
             importantNouns.append(token)
             significantTokensFound = True
 
@@ -226,3 +226,5 @@ def getCoreIssues(text):
 
     return outputs
 
+#print( getCoreIssues("microwave with no power") )
+print( getCoreIssues("Cartridge showing bubbles"))

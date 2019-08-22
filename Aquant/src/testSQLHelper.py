@@ -2,7 +2,7 @@ import unittest
 import pandas
 
 from Objects import WorkOrder, RootSymptom, PartsRecommendation
-from SQLHelper import fetchRootSymptomsFromDB, getPartsPredictiction
+from SQLHelper import getPartsPredictiction
 
 class TestSQLHelper(unittest.TestCase): 
       
