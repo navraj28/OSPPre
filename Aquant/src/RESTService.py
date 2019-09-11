@@ -5,7 +5,7 @@ from Pipeline import fromProblemDescriptionToPartsPrediction
 from Pipeline import RootSymptom
 from Pipeline import WorkOrder
 from USEWithPlaceHolders import get_features, init
-from SQLHelper import getPartsPredictiction
+from SQLHelper import getPartsPredictiction, buildSymptomCooccurence
 
 #from USE import cosineSimilarity
 from sklearn.metrics.pairwise import cosine_similarity
@@ -18,6 +18,8 @@ import tensorflow_hub as hub
 
 app = Flask(__name__)
 api = Api(app)
+
+THRESHOLD_FOR_COOCCURENCE = 1
 
 def _json_object_hook(d): return namedtuple('X', d.keys())(*d.values())
 def json2obj(data): return json.loads(data, object_hook=_json_object_hook)
@@ -62,6 +64,7 @@ def predictPartsGivenSymptoms():
     content = request.get_json()
     x = json2obj(request.data)
 
+    print(x.SymptomsThatArePresent, type(x.SymptomsThatArePresent))
     #TODO Change WO Constructor
     workOrder = WorkOrder('Manufacturer', 'ProductFamily', 'ProductLine', 'ID', '')
     workOrder.rootSymptomIds = x.SymptomsThatArePresent
@@ -69,6 +72,37 @@ def predictPartsGivenSymptoms():
 
     pred = getPartsPredictiction(workOrder)
     jsonStr = json.dumps([ob.__dict__ for ob in pred])
+    return jsonStr
+
+@app.route('/getNextSymptomQuestion', methods=['POST'])
+def getNextSymptomQuestion():
+    content = request.get_json()
+    x = json2obj(request.data)
+
+    arr = buildSymptomCooccurence(x.UniqueProductIdentifier, x.SymptomsThatArePresent, x.SymptomsThatAreNOTPresent, THRESHOLD_FOR_COOCCURENCE)
+    j = 0
+    while j < len(arr[0]):
+        if arr[0][j] in x.SymptomsThatArePresent:
+            j += 1
+            continue
+        if arr[0][j] in x.SymptomsThatAreNOTPresent:
+            j += 1
+            continue
+        if arr[0][j] in x.SymptomsThatWereSkipped:
+            j += 1
+            continue
+
+        ret = {}
+        ret['symptomId'] = arr[0][j]
+        ret['symptomQuestion'] = arr[1][j]
+        jsonStr = json.dumps(ret)
+        return jsonStr
+        j += 1    
+
+    ret = {}
+    ret['symptomId'] = -1
+    ret['symptomQuestion'] = "Done with the Triage."
+    jsonStr = json.dumps(ret)
     return jsonStr
 
 if __name__ == '__main__':

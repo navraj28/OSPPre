@@ -2,7 +2,7 @@ import unittest
 import pandas
 
 from Objects import WorkOrder, RootSymptom, PartsRecommendation
-from SQLHelper import getPartsPredictiction
+from SQLHelper import getPartsPredictiction, buildSymptomCooccurence
 
 class TestSQLHelper(unittest.TestCase): 
       
@@ -10,6 +10,52 @@ class TestSQLHelper(unittest.TestCase):
         pass
 
     def test_SQLGivenSymptoms(self):
+        uniqueProductId = 'ManufacturerProductFamilyProductLine'
+        symptomsPresent = [3]
+        symptomsNotPresent = []
+        arr = buildSymptomCooccurence(uniqueProductId, symptomsPresent, symptomsNotPresent, 1)
+        self.assertTrue(3 in arr[0])
+        self.assertTrue(2 in arr[0])
+        self.assertTrue(0 in arr[0])
+        self.assertTrue(len(arr[0]) == 3)
+
+        symptomsPresent = [3,2]
+        symptomsNotPresent = []
+        arr = buildSymptomCooccurence(uniqueProductId, symptomsPresent, symptomsNotPresent, 1)
+        self.assertTrue(3 in arr[0])
+        self.assertTrue(2 in arr[0])
+        self.assertTrue(len(arr[0]) == 2)
+
+        symptomsPresent = [3,2]
+        symptomsNotPresent = [1]
+        arr = buildSymptomCooccurence(uniqueProductId, symptomsPresent, symptomsNotPresent, 1)
+        self.assertTrue(3 in arr[0])
+        self.assertTrue(2 in arr[0])
+        self.assertTrue(len(arr[0]) == 2)
+
+        symptomsPresent = [3, 0]
+        symptomsNotPresent = []
+        arr = buildSymptomCooccurence(uniqueProductId, symptomsPresent, symptomsNotPresent, 1)
+        self.assertTrue(3 in arr[0])
+        self.assertTrue(0 in arr[0])
+        self.assertTrue(len(arr[0]) == 2)
+
+        symptomsPresent = [3]
+        symptomsNotPresent = [1,4]
+        arr = buildSymptomCooccurence(uniqueProductId, symptomsPresent, symptomsNotPresent, 1)
+        self.assertTrue(3 in arr[0])
+        self.assertTrue(2 in arr[0])
+        self.assertTrue(0 in arr[0])
+        self.assertTrue(len(arr[0]) == 3)
+
+        symptomsPresent = [3,0,2]
+        symptomsNotPresent = [1,4]
+        arr = buildSymptomCooccurence(uniqueProductId, symptomsPresent, symptomsNotPresent, 0)
+        self.assertTrue(3 in arr[0])
+        self.assertTrue(2 in arr[0])
+        self.assertTrue(0 in arr[0])
+        self.assertTrue(len(arr[0]) == 3)
+
         workOrder = WorkOrder('Manufacturer', 'ProductFamily', 'ProductLine', 'ID', 'Radiator is leaking and the battery needs to be replaced')
         workOrder.rootSymptomIds = [3,2,1]
         pred = getPartsPredictiction(workOrder)
