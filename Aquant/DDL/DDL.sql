@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS master_symptoms (
     symptom_id INT NOT NULL,
 	symptom_text VARCHAR(255) NOT NULL,
 	symptom_question VARCHAR(255) NOT NULL,
+	vector VARCHAR(20000) NOT NULL,
     PRIMARY KEY (unique_product_id, symptom_id)
 )  ENGINE=INNODB;
 
