@@ -1,4 +1,5 @@
 # aquant.io
+[A short read-up is here](https://medium.com/@navraj28/parts-prediction-given-the-problem-description-6767c3d7e8ed)
 This is an attempt at Reverse engineering Aquant.io's Smart Triage Feature. It is a solution that uses AI to assist a Call Center Agent in the Field Service Domain, in trouble shooting a Problem based on reported issues & also recommends what Parts are required to fix the issue. It uses Spacy to parse the Problem Description & extract details. It uses TensorFlow Universal Sentence Encoder to eliminate duplicate symptoms i.e. "Battery is dead" is the same as "Battery needs to be replaced". Basically, unstructured text ends up as structured entities in a relational database.
 
 Below images illustrate the concepts:
