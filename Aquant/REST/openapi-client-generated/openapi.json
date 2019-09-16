@@ -1,0 +1,188 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "OSPP",
+    "description" : "REST services supported by OSPP",
+    "version" : "1.0"
+  },
+  "servers" : [ {
+    "url" : "http://127.0.0.1:5000"
+  } ],
+  "paths" : {
+    "/PredictPartsGivenProblemDescription" : {
+      "post" : {
+        "description" : "Auto generated using Swagger Inspector",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body"
+              },
+              "examples" : {
+                "0" : {
+                  "value" : "{  \r\n   \"UniqueProductIdentifier\":\"Manufacturer-ProductFamily-ProductLine-ID\",\r\n   \"ProblemDescription\":\"Radiator is leaking and the battery needs to be replaced\"\r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Auto generated using Swagger Inspector",
+            "content" : {
+              "text/html; charset=utf-8" : {
+                "schema" : {
+                  "type" : "string"
+                },
+                "examples" : { }
+              }
+            }
+          }
+        },
+        "servers" : [ {
+          "url" : "http://127.0.0.1:5000"
+        } ]
+      },
+      "servers" : [ {
+        "url" : "http://127.0.0.1:5000"
+      } ]
+    },
+    "/PredictPartsGivenSymptoms" : {
+      "post" : {
+        "description" : "Auto generated using Swagger Inspector",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_1"
+              },
+              "examples" : {
+                "0" : {
+                  "value" : "{  \r\n   \"UniqueProductIdentifier\": \"Manufacturer-ProductFamily-ProductLine-ID\",\r\n   \"SymptomsThatArePresent\": [2,3],\r\n   \"SymptomsThatAreNOTPresent\": [1]   \r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Auto generated using Swagger Inspector",
+            "content" : {
+              "text/html; charset=utf-8" : {
+                "schema" : {
+                  "type" : "string"
+                },
+                "examples" : { }
+              }
+            }
+          }
+        },
+        "servers" : [ {
+          "url" : "http://127.0.0.1:5000"
+        } ]
+      },
+      "servers" : [ {
+        "url" : "http://127.0.0.1:5000"
+      } ]
+    },
+    "/getNextSymptomQuestion" : {
+      "post" : {
+        "description" : "Auto generated using Swagger Inspector",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_2"
+              },
+              "examples" : {
+                "0" : {
+                  "value" : "{  \r\n   \"UniqueProductIdentifier\": \"ManufacturerProductFamilyProductLine\",\r\n   \"SymptomsThatArePresent\": [3],\r\n   \"SymptomsThatAreNOTPresent\": [1],\r\n   \"SymptomsThatWereSkipped\": [0]  \r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Auto generated using Swagger Inspector",
+            "content" : {
+              "text/html; charset=utf-8" : {
+                "schema" : {
+                  "type" : "string"
+                },
+                "examples" : { }
+              }
+            }
+          }
+        },
+        "servers" : [ {
+          "url" : "http://127.0.0.1:5000"
+        } ]
+      },
+      "servers" : [ {
+        "url" : "http://127.0.0.1:5000"
+      } ]
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "body" : {
+        "type" : "object",
+        "properties" : {
+          "UniqueProductIdentifier" : {
+            "type" : "string"
+          },
+          "ProblemDescription" : {
+            "type" : "string"
+          }
+        }
+      },
+      "body_1" : {
+        "type" : "object",
+        "properties" : {
+          "UniqueProductIdentifier" : {
+            "type" : "string"
+          },
+          "SymptomsThatArePresent" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "SymptomsThatAreNOTPresent" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        }
+      },
+      "body_2" : {
+        "type" : "object",
+        "properties" : {
+          "UniqueProductIdentifier" : {
+            "type" : "string"
+          },
+          "SymptomsThatWereSkipped" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "SymptomsThatArePresent" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "SymptomsThatAreNOTPresent" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}
