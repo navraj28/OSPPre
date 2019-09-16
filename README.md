@@ -1,21 +1,29 @@
 # OSPP (Open Source Parts Prediction) largely inspired by Aquant.io's Smart Triage & Parts Prediction
 [A short read-up on Medium is here.](https://medium.com/@navraj28/parts-prediction-given-the-problem-description-6767c3d7e8ed) 
+The Wiki has some additional insights.
 
-It is a solution that uses AI to assist a Call Center Agent in the Field Service Domain, in trouble shooting a Problem based on reported issues & also recommends what Parts are required to fix the issue. It uses Spacy to parse the Problem Description & extract details. It uses TensorFlow Universal Sentence Encoder to eliminate duplicate symptoms i.e. "Battery is dead" is the same as "Battery needs to be replaced". Basically, unstructured text ends up as structured entities in a relational database.
+## Installation
+	Install the Anaconda Environment via AnacondaEnvironment.yml
+	Create a MySQL DB Schema - as per DDL/DDL.sql
+	Change the database connection properties in SQLHelper.py
 
-Below images illustrate the concepts:
+## Usage
+### Going from unstructured historical data to structured categorical data
+	Get some historical data containing Work Orders & Problem Descriptions, for a specific machine, in the format shown in SampleInput/IntegrationTest.csv
+	Edit Pipeline.py to change the directory into which the outputs, MasterList.csv & WOsAndSymptoms.csv, are written.
+	Edit InvokePipeline.py to point to the file containing the historical data. 
+	Invoke InvokePipeline.py.
+	Review the output of the above process. Edit MasterList.csv to add questions specific to the Symptoms.
+	Import MasterList.csv & WOsAndSymptoms.csv into the tables master_symptoms & wo_symptom_cooccurence, respectively.
+	The tables parts_master should contain the Parts Master data.
+	The table wo_parts should contain the historical data associating the WOs & the Parts consumed.
+	Once the 4 tables are populated, start the REST service - RestService.py
+  
+  ### Getting Predictions
+	Review the Swagger API spec under REST/openapi-client-generated
+	There are just 3 APIs.
+	1. Get the next Symptom question (Service used by the Triage UI)
+	2. Get Predictions given the Symptom IDs
+	3. Get Predictions given the Problem Description text
 
-![alt text](https://github.com/navraj28/aquant/blob/master/Aquant1.png)
-![alt text](https://github.com/navraj28/aquant/blob/master/Aquant2.png)
-## Spacy is used to identify the main entities & related problems
-![alt text](https://github.com/navraj28/aquant/blob/master/spacy.jpg)
-![alt text](https://github.com/navraj28/aquant/blob/master/Aquant3.png)
-## TensorFlow's Universal Sentence Encode is used for Semantic comparison and elimination of Duplicates.
-![alt text](https://github.com/navraj28/aquant/blob/master/Aquant4.png)
-![alt text](https://github.com/navraj28/aquant/blob/master/Aquant5.png)
-
-# Parts Prediction Flow
-#### Now that the data is imported into Relational database, Predicting Parts - either via Symptoms or full Problem Description is trivial
-##### Predicting via actual Problem Description - Identify Root Symptoms & then query DB
-![alt text](https://github.com/navraj28/aquant/blob/master/PredictionFlow1.png)
-##### Predicting via Symptom Co-occurence, just the queries are different
+  [The API documentation is here](https://app.swaggerhub.com/apis/navraj28/OSPP/1.0)
