@@ -1,6 +1,0 @@
-symptom_id,unique_product_id,symptom_text,symptom_question
-0,ManufacturerProductFamilyProductLine,Radiator leaking,ToDo
-1,ManufacturerProductFamilyProductLine,Water leaking,ToDo
-2,ManufacturerProductFamilyProductLine,Compressor is jammed,ToDo
-3,ManufacturerProductFamilyProductLine,Battery is dead,ToDo
-4,ManufacturerProductFamilyProductLine,Radiator vibrating,ToDo
