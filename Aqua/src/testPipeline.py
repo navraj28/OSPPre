@@ -1,5 +1,7 @@
 import unittest 
 import pandas
+import csv
+from pathlib import Path
 
 from Pipeline import getUniqueSymptoms, fromProblemDescriptionToPartsPrediction, PipelineFacade
 from Objects import WorkOrder, RootSymptom, PartsRecommendation
@@ -12,7 +14,9 @@ class TestPipeline(unittest.TestCase):
         pass
 
     def test_UniqueSymptoms(self): 
-        input = pandas.read_csv('C:\\SAM\\data\\UnitTests\\UnitTestUniqueSymptoms.csv')
+        base_path = Path(__file__).parent
+        file_path = (base_path / "../SampleInput/UnitTestUniqueSymptoms.csv").resolve()
+        input = pandas.read_csv(str(file_path))
         data_processed = input['Symptoms'].values
         masterList, BASE_VECTORS = getUniqueSymptoms(data_processed)
         print("Set of Unique Symptoms ", masterList.keys())
@@ -38,7 +42,9 @@ class TestPipeline(unittest.TestCase):
                 self.assertTrue( len(array) == 0)
 
     def test_PipelineFacade(self):
-        pipelineFacade = PipelineFacade('C:\\SAM\\data\\UnitTests\\IntegrationTest.csv')
+        base_path = Path(__file__).parent
+        file_path = (base_path / "../SampleInput/IntegrationTest.csv").resolve()
+        pipelineFacade = PipelineFacade(str(file_path))
         pipelineFacade.processWOs()
         for workOrder in pipelineFacade.WOs:
             if workOrder.workOrderId == "WO-1":

@@ -7,6 +7,7 @@ import pandas
 import csv
 import numpy as np
 import json
+from pathlib import Path
 
 def mapSymptomsToRootSymptoms(masterList, wo):    
     for symptom in wo.originalSymptoms:
@@ -96,7 +97,10 @@ class PipelineFacade:
                     break
             rootSymptoms.append(row)
 
-        with open('C:\\SAM\\data\\UnitTests\\MasterList.csv', 'w', newline='') as writeFile:
+        base_path = Path(__file__).parent
+        file_path = (base_path / "../SampleOutput/MasterList.csv").resolve()
+
+        with open(str(file_path), 'w', newline='') as writeFile:
             writer = csv.writer(writeFile)
             writer.writerow(["unique_product_id", "symptom_id", "symptom_text", "symptom_question","DuplicateSymptomsList", "vector"])
             writer.writerows(rootSymptoms)
@@ -112,7 +116,8 @@ class PipelineFacade:
                 row.append( getSymptomIdForeignKey(rootSymptom, rootSymptoms))
                 rows.append(row)
 
-        with open('C:\\SAM\\data\\UnitTests\\WOsAndSymptoms.csv', 'w', newline='') as writeFile:
+        file_path = (base_path / "../SampleOutput/WOsAndSymptoms.csv").resolve()
+        with open(str(file_path), 'w', newline='') as writeFile:
             writer = csv.writer(writeFile)
             writer.writerow(["unique_product_id", "work_order_id", "symptom_id"])
             writer.writerows(rows)
