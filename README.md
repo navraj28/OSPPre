@@ -1,4 +1,4 @@
-# OSPP (Open Source Parts Prediction) largely inspired by Aquant.io's Smart Triage & Parts Prediction
+# OSPPre (Open Source Parts Prediction), largely inspired by Aquant.io's Smart Triage & Parts Prediction
 [A short read-up on Medium is here.](https://medium.com/@navraj28/parts-prediction-given-the-problem-description-6767c3d7e8ed) 
 The Wiki has some additional insights.
 
@@ -9,14 +9,14 @@ The Wiki has some additional insights.
 
 ## Usage
 ### Going from unstructured historical data to structured categorical data
-	Get some historical data containing Work Orders & Problem Descriptions, for a specific machine, in the format shown in SampleInput/IntegrationTest.csv
-	Edit Pipeline.py to change the directory into which the outputs, MasterList.csv & WOsAndSymptoms.csv, are written.
+	Get some historical data containing Work Orders & Problem Descriptions, for a specific machine, in the format shown in SampleInput/IntegrationTest.csv. Or use the sample file.
+	By default, the outputs, MasterList.csv & WOsAndSymptoms.csv, are written to the folder /SampleOutput.
 	Edit InvokePipeline.py to point to the file containing the historical data. 
 	Invoke InvokePipeline.py.
-	Review the output of the above process. Edit MasterList.csv to add questions specific to the Symptoms.
-	Import MasterList.csv & WOsAndSymptoms.csv into the tables master_symptoms & wo_symptom_cooccurence, respectively.
-	The tables parts_master should contain the Parts Master data.
-	The table wo_parts should contain the historical data associating the WOs & the Parts consumed.
+	Review the outputs of the above process. MasterList.csv contains the Master list of Symptoms that can go wrong with the machine. Review & edit this file. Review the column symptom_text. This contains the Symptoms that are shown in the UI. Since this shows up on the UI, they should look good. Feel free to replace any value here with a semantically similar value from the column DuplicateSymptomsList. The column symptom_question should be edited to hold the question asked by the Call Center Agent during the Triage. For a Symptom_text like "Radiator leaking", the question can be something like "Is the Radiator leaking ?". WOsAndSymptoms.csv contains WO-Symptom co-occurrences and does not need to be edited.   
+	Import MasterList.csv & WOsAndSymptoms.csv into the tables master_symptoms & wo_symptom_cooccurence, respectively. Note that the column DuplicateSymptomsList in MasterList.csv, does not reside in the database. Since MasterList.csv contains vectors, good import tools like Navicat or RazorSQL are required to perform the import.
+	The table parts_master should contain the Parts Master data. Or use DDL/DummyPartsMaster.sql.
+	The table wo_parts should contain the historical data associating the WOs & the Parts consumed. Or use DDL/DummyWOParts.sql
 	Once the 4 tables are populated, start the REST service - RestService.py
   
   ### Getting Predictions
