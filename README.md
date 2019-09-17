@@ -1,4 +1,4 @@
-# OSPPre (Open Source Parts Prediction) largely inspired by Aquant.io's Smart Triage & Parts Prediction
+# OSPPre (Open Source Parts Prediction), largely inspired by Aquant.io's Smart Triage & Parts Prediction
 [A short read-up on Medium is here.](https://medium.com/@navraj28/parts-prediction-given-the-problem-description-6767c3d7e8ed) 
 The Wiki has some additional insights.
 
