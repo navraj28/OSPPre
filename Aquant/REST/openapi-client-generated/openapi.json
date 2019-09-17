@@ -20,7 +20,7 @@
               },
               "examples" : {
                 "0" : {
-                  "value" : "{  \r\n   \"UniqueProductIdentifier\":\"Manufacturer-ProductFamily-ProductLine-ID\",\r\n   \"ProblemDescription\":\"Radiator is leaking and the battery needs to be replaced\"\r\n}"
+                  "value" : "{  \r\n   \"UniqueProductIdentifier\":\"ManufacturerProductFamilyProductLine\",\r\n   \"ProblemDescription\":\"Radiator is leaking and the battery needs to be replaced\"\r\n}"
                 }
               }
             }
@@ -58,7 +58,7 @@
               },
               "examples" : {
                 "0" : {
-                  "value" : "{  \r\n   \"UniqueProductIdentifier\": \"Manufacturer-ProductFamily-ProductLine-ID\",\r\n   \"SymptomsThatArePresent\": [2,3],\r\n   \"SymptomsThatAreNOTPresent\": [1]   \r\n}"
+                  "value" : "{  \r\n   \"UniqueProductIdentifier\": \"ManufacturerProductFamilyProductLine\",\r\n   \"SymptomsThatArePresent\": [2,3],\r\n   \"SymptomsThatAreNOTPresent\": [1]   \r\n}"
                 }
               }
             }

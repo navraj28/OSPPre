@@ -89,7 +89,7 @@ class TestPipeline(unittest.TestCase):
                 self.assertTrue( len(workOrder.rootSymptoms) == 3)
 
     def test_PartsReccoGivenProblemDescription(self):
-        workOrder = WorkOrder('Manufacturer', 'ProductFamily', 'ProductLine', 'ID', 'Radiator is leaking and the battery needs to be replaced')
+        workOrder = WorkOrder('ManufacturerProductFamilyProductLine', 'ID', 'Radiator is leaking and the battery needs to be replaced')
         pred = fromProblemDescriptionToPartsPrediction(workOrder)
         for part in pred:
             if part.partId == 2:

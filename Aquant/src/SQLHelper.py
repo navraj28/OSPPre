@@ -12,7 +12,7 @@ mydb = mysql.connector.connect(
     host="localhost",
     user="root",
     passwd="root",
-    database="aqua"
+    database="test_aqua"
 )
 
 cursor = mydb.cursor()
@@ -75,7 +75,7 @@ def buildPartsQuery(workOrder):
     innerQuery = ""
     for sympromId in workOrder.rootSymptomIds:
         if firstIteration:
-            finalSQL = beginning + str(sympromId) + ') '
+            finalSQL = beginning + str(sympromId) + ') and unique_product_id = ' + "'" + workOrder.unique_product_id + "' "
             firstIteration = False
             continue
         innerQuery = innerQuery + innerQueryStatic + str(sympromId) + ') '
@@ -138,7 +138,7 @@ def buildWOCountQuery(workOrder):
     innerQuery = ""
     for sympromId in workOrder.rootSymptomIds:
         if firstIteration:
-            finalSQL = beginning + str(sympromId) + ') '
+            finalSQL = beginning + str(sympromId) + ') and unique_product_id = ' + "'" + workOrder.unique_product_id + "' "
             firstIteration = False
             continue
         innerQuery = innerQuery + innerQueryStatic + str(sympromId) + ') '
@@ -166,6 +166,8 @@ def buildWOCountQuery(workOrder):
 
 def getPartsPredictiction(workOrder):
     totalWOsWithTheseSymptoms = buildWOCountQuery(workOrder)
+    if totalWOsWithTheseSymptoms == 0:
+        raise ValueError('No records found. Check the value of UniqueProductIdentifier & SymptomIDs.')
     partsByWO = buildPartsQuery(workOrder)
     partRecommendations = []
     #Loop thru partsByWO - as long as the Part is used in ALL WOs or stop a 4
@@ -229,7 +231,7 @@ def buildPartsQuery(workOrder):
     innerQuery = ""
     for sympromId in workOrder.rootSymptomIds:
         if firstIteration:
-            finalSQL = beginning + str(sympromId) + ') '
+            finalSQL = beginning + str(sympromId) + ') and unique_product_id = ' + "'" + workOrder.unique_product_id + "' "
             firstIteration = False
             continue
         innerQuery = innerQuery + innerQueryStatic + str(sympromId) + ') '

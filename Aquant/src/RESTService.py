@@ -50,29 +50,34 @@ api.add_resource(HelloWorld, '/')
 
 @app.route('/PredictPartsGivenProblemDescription', methods=['POST'])
 def predictPartsGivenProblemDescription():
-    content = request.get_json()
-    x = json2obj(request.data)
+    try:
+        content = request.get_json()
+        x = json2obj(request.data)
 
-    #TODO Change WO Constructor
-    workOrder = WorkOrder('Manufacturer', 'ProductFamily', 'ProductLine', 'ID', x.ProblemDescription)
-    pred = fromProblemDescriptionToPartsPrediction(workOrder)
-    jsonStr = json.dumps([ob.__dict__ for ob in pred])
-    return jsonStr
+        workOrder = WorkOrder(x.UniqueProductIdentifier, 'ID', x.ProblemDescription)
+        pred = fromProblemDescriptionToPartsPrediction(workOrder)
+        jsonStr = json.dumps([ob.__dict__ for ob in pred])
+        return jsonStr
+    except ValueError as err:
+        jsonStr = json.dumps( str(err) )
+        return jsonStr
 
 @app.route('/PredictPartsGivenSymptoms', methods=['POST'])
 def predictPartsGivenSymptoms():
-    content = request.get_json()
-    x = json2obj(request.data)
+    try:
+        content = request.get_json()
+        x = json2obj(request.data)
 
-    print(x.SymptomsThatArePresent, type(x.SymptomsThatArePresent))
-    #TODO Change WO Constructor
-    workOrder = WorkOrder('Manufacturer', 'ProductFamily', 'ProductLine', 'ID', '')
-    workOrder.rootSymptomIds = x.SymptomsThatArePresent
-    workOrder.rootSymptomIdsNotPresent = x.SymptomsThatAreNOTPresent
+        workOrder = WorkOrder(x.UniqueProductIdentifier, 'ID', '')
+        workOrder.rootSymptomIds = x.SymptomsThatArePresent
+        workOrder.rootSymptomIdsNotPresent = x.SymptomsThatAreNOTPresent
 
-    pred = getPartsPredictiction(workOrder)
-    jsonStr = json.dumps([ob.__dict__ for ob in pred])
-    return jsonStr
+        pred = getPartsPredictiction(workOrder)
+        jsonStr = json.dumps([ob.__dict__ for ob in pred])
+        return jsonStr
+    except ValueError as err:
+        jsonStr = json.dumps( str(err) )
+        return jsonStr
 
 @app.route('/getNextSymptomQuestion', methods=['POST'])
 def getNextSymptomQuestion():

@@ -6,10 +6,8 @@ import numpy, json
 THRESHOLD = 0.84
 
 class WorkOrder:
-    def __init__(self, manufacturer, productFamily, productLine, workOrderId, problemDescription):
-        self.manufacturer = manufacturer
-        self.productFamily = productFamily
-        self.productLine = productLine
+    def __init__(self, unique_product_id, workOrderId, problemDescription):
+        self.unique_product_id = unique_product_id
         self.workOrderId = workOrderId
         self.problemDescription = problemDescription
         self.originalSymptoms = getCoreIssues(problemDescription)

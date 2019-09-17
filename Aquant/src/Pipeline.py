@@ -56,8 +56,8 @@ def getUniqueSymptoms(data_processed):
 
 def getSymptomIdForeignKey(rootSymptom, rootSymptoms):
     for row in rootSymptoms:
-        if row[4] == rootSymptom:
-            return row[3]
+        if row[2] == rootSymptom:
+            return row[1]
     return -1
 
 class PipelineFacade:
@@ -66,7 +66,7 @@ class PipelineFacade:
         self.WOs = []
         input = pandas.read_csv(fileName)
         for index, row in input.iterrows():
-            self.WOs.append( WorkOrder(row['Manufacturer'], row['ProductFamily'], row['ProductLine'], row['ID'], row['Description']) )
+            self.WOs.append( WorkOrder(row['unique_product_id'], row['ID'], row['Description']) )
         
     def processWOs(self):
         allSymptoms = []
@@ -81,9 +81,7 @@ class PipelineFacade:
         rootSymptoms = []
         for index, key in enumerate(masterList):
             row = []
-            row.append( self.WOs[0].manufacturer)
-            row.append( self.WOs[0].productFamily)
-            row.append( self.WOs[0].productLine)
+            row.append( self.WOs[0].unique_product_id)
             row.append(index)
             row.append(key)
             row.append("ToDo")
@@ -100,7 +98,7 @@ class PipelineFacade:
 
         with open('C:\\SAM\\data\\UnitTests\\MasterList.csv', 'w', newline='') as writeFile:
             writer = csv.writer(writeFile)
-            writer.writerow(["Manufacturer", "ProductFamily", "ProductLine", "SymptomId", "SymptomText", "SymptomQuestion","DuplicateSymptomsList", "VectorForm"])
+            writer.writerow(["unique_product_id", "symptom_id", "symptom_text", "symptom_question","DuplicateSymptomsList", "vector"])
             writer.writerows(rootSymptoms)
         writeFile.close()
 
@@ -109,15 +107,14 @@ class PipelineFacade:
         for wo in self.WOs:
             for rootSymptom in wo.rootSymptoms:
                 row = []
-                row.append( wo.manufacturer)
-                row.append( wo.productFamily)
-                row.append( wo.productLine)
+                row.append( wo.unique_product_id)
                 row.append( wo.workOrderId)
                 row.append( getSymptomIdForeignKey(rootSymptom, rootSymptoms))
                 rows.append(row)
 
         with open('C:\\SAM\\data\\UnitTests\\WOsAndSymptoms.csv', 'w', newline='') as writeFile:
             writer = csv.writer(writeFile)
+            writer.writerow(["unique_product_id", "work_order_id", "symptom_id"])
             writer.writerows(rows)
         writeFile.close()
 
