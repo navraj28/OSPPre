@@ -20,7 +20,7 @@ class TestDependencyParser(unittest.TestCase):
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues =  getCoreIssues("The Rack is bent")
-        self.assertEqual( coreIssues[0] , "Rack is bent")
+        self.assertEqual( coreIssues[0] , "The Rack is bent")
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues =  getCoreIssues("Cartridge showing bubbles")
@@ -52,9 +52,9 @@ class TestDependencyParser(unittest.TestCase):
         self.assertEqual( len(coreIssues) , 1)
 
         phrases = getCoreIssues("The Radiator is leaking, battery is overflowing, and the tubes are rusted.")
-        self.assertEqual( phrases[0] , "Radiator leaking")
-        self.assertEqual( phrases[1] , "battery overflowing")
-        self.assertEqual( phrases[2] , "tubes rusted")
+        self.assertEqual( phrases[0] , "The Radiator leaking")
+        self.assertEqual( phrases[1] , "battery is overflowing")
+        self.assertEqual( phrases[2] , "the tubes are rusted")
         self.assertEqual( len(phrases) , 3)
 
         coreIssues =  getCoreIssues("Unable to print")
@@ -66,7 +66,7 @@ class TestDependencyParser(unittest.TestCase):
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues =  getCoreIssues("Refurbish the cycle.")
-        self.assertEqual( coreIssues[0] , "Refurbish cycle")
+        self.assertEqual( coreIssues[0] , "Refurbish the cycle")
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues =  getCoreIssues("Refurbish")
@@ -90,19 +90,19 @@ class TestDependencyParser(unittest.TestCase):
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues = getCoreIssues('The Pressure indicator is showing Low')
-        self.assertEqual( coreIssues[0] , "Pressure indicator showing Low")
+        self.assertEqual( coreIssues[0] , "The Pressure indicator showing Low")
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues = getCoreIssues(u"The delivery was very late!")
-        self.assertEqual( coreIssues[0] , "delivery was late")
+        self.assertEqual( coreIssues[0] , "The delivery was late")
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues = getCoreIssues(u"Create new work orders")
-        self.assertEqual( coreIssues[0] , "Create orders")
+        self.assertEqual( coreIssues[0] , "Create new work orders")
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues = getCoreIssues(u"A strange vomiting sensation")
-        self.assertEqual( coreIssues[0] , "strange vomiting sensation")
+        self.assertEqual( coreIssues[0] , "A strange vomiting sensation")
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues = getCoreIssues(u"Feel like throwing up")
@@ -110,23 +110,23 @@ class TestDependencyParser(unittest.TestCase):
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues = getCoreIssues(u"Water leaking all over")
-        self.assertEqual( coreIssues[0] , "Water leaking")
+        self.assertEqual( coreIssues[0] , "Water leaking over")
         self.assertEqual( len(coreIssues) , 1)
 
         coreIssues = getCoreIssues(u"Radiator is leaking and the battery needs to be replaced")
         self.assertEqual( coreIssues[0] , "Radiator leaking")
-        self.assertEqual( coreIssues[1] , "battery needs replaced")
+        self.assertEqual( coreIssues[1] , "the battery needs replaced")
         self.assertEqual( len(coreIssues) , 2)
 
-        coreIssues = getCoreIssues(u"Water leaking all over the place, the Compressor is not starting and the battery needs replacement")
-        self.assertEqual( coreIssues[0] , "Water leaking")
-        self.assertEqual( coreIssues[1] , "Compressor not starting")
-        self.assertEqual( coreIssues[2] , "battery needs replacement")
+        coreIssues = getCoreIssues(u"Water leaking all over, the Compressor is not starting and the battery needs replacement")
+        self.assertEqual( coreIssues[0] , "Water leaking over")
+        self.assertEqual( coreIssues[1] , "the Compressor not starting")
+        self.assertEqual( coreIssues[2] , "the battery needs replacement")
         self.assertEqual( len(coreIssues) , 3)
 
         coreIssues = getCoreIssues("I was throwing up all night")
         self.assertEqual( coreIssues[0] , "I throwing up")
-        self.assertEqual( len(coreIssues) , 1)
+        self.assertEqual( len(coreIssues) , 2)
 
         coreIssues = getCoreIssues("I am suffering from severe cough and Rubella")
         self.assertEqual( coreIssues[1] , "severe cough")
