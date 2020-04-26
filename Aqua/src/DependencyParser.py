@@ -1,6 +1,7 @@
 import spacy
 #nlp = spacy.load('en')
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_lg")
+nlp.add_pipe(nlp.create_pipe('merge_noun_chunks'))
 
 def addIfNotDuplicate(value, outputs):
     first, *middle, last = value.split()
@@ -54,7 +55,7 @@ def getCoreIssues(text):
         if token.dep_ == "ROOT" and token.text == token.head.text:
             rootWords.append(token)
             
-        if token.pos_ in ["PROPN"]:
+        if token.pos_ in ["PROPN", "NOUN"]:
             importantNouns.append(token)
             significantTokensFound = True
 
@@ -70,7 +71,8 @@ def getCoreIssues(text):
             nsubj.append(token)
             significantTokensFound = True
             
-        if token.dep_ == "amod" or token.dep_ == "advmod":
+#        if token.dep_ == "amod" or token.dep_ == "advmod":
+        if token.dep_ in ["amod", "advmod"]:
             amod.append(token)
             significantTokensFound = True
             
@@ -136,7 +138,13 @@ def getCoreIssues(text):
 
                 intermediateStr = compoundWord + " " + token.head.text + " " + adjectiveCompoundStr
                 del compoundsTracker[token]
-                
+
+            #If acl is related to a Direct Object, handle it
+            for dObjToken in dobj:
+                if token == dObjToken.head:
+                    intermediateStr = intermediateStr + " " + dObjToken.text
+            ##end acl dobj
+
         #Add Direct Object
         for dObjToken in dobj:
             if token.head == dObjToken.head: 
@@ -183,7 +191,8 @@ def getCoreIssues(text):
         compoundWord = compoundsTracker.get(token.head)
         if compoundWord is None:
             #Restrict advmods to those related to a Noun
-            if token.dep_ == "advmod" and token.pos_ not in ["NOUN", "PROPN"]:
+#            if token.dep_ == "advmod" and token.pos_ not in ["NOUN", "PROPN"]:
+            if token.dep_ in ["amod", "advmod"] and token.pos_ not in ["NOUN", "PROPN"]:
                 continue
             intermediateStr = ""
             intermediateStr = token.text + " " + token.head.text
@@ -226,5 +235,6 @@ def getCoreIssues(text):
 
     return outputs
 
-#print( getCoreIssues("microwave with no power") )
-print( getCoreIssues("Cartridge showing bubbles"))
+print( getCoreIssues("microwave with no power") )
+print( getCoreIssues("I was throwing up all night") )
+print( getCoreIssues("Water leaking all over, the Compressor is not starting and the battery needs replacement"))
