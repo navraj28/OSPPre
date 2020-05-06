@@ -5,7 +5,7 @@ from Pipeline import fromProblemDescriptionToPartsPrediction
 from Pipeline import RootSymptom
 from Pipeline import WorkOrder
 from USEWithPlaceHolders import get_features, init
-from SQLHelper import getPartsPredictiction, buildSymptomCooccurence
+from SQLHelper import getPartsPredictiction, buildSymptomCooccurence, fetchRootSymptomsForUI
 
 #from USE import cosineSimilarity
 from sklearn.metrics.pairwise import cosine_similarity
@@ -109,6 +109,19 @@ def getNextSymptomQuestion():
     ret['symptomQuestion'] = "Done with the Triage."
     jsonStr = json.dumps(ret)
     return jsonStr
+
+@app.route('/getRootSymptoms', methods=['POST'])
+def getRootSymptoms():
+    try:
+        content = request.get_json()
+        x = json2obj(request.data)
+
+        symptoms = fetchRootSymptomsForUI(x.UniqueProductIdentifier)
+        jsonStr = json.dumps([ob.__dict__ for ob in symptoms])
+        return jsonStr
+    except ValueError as err:
+        jsonStr = json.dumps( str(err) )
+        return jsonStr
 
 if __name__ == '__main__':
     init()

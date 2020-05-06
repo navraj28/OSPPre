@@ -126,7 +126,7 @@ class PipelineFacade:
 def fromProblemDescriptionToPartsPrediction(workOrder):
     #Fetch Root Symptoms from DB
     #TODO Needs to be cached
-    rootSymptoms = fetchRootSymptomsFromDB()
+    rootSymptoms = fetchRootSymptomsFromDB(workOrder.unique_product_id)
 
     #Loop thru the Original Symptoms to map them to their Root symptoms
     workOrder.mapToRootSymptoms(rootSymptoms)

@@ -1,5 +1,5 @@
 import mysql.connector
-from Objects import WorkOrder, RootSymptom, PartsRecommendation
+from Objects import WorkOrder, RootSymptom, PartsRecommendation, UIRootSymptom
 
 class PartsByWorkOrder:
     def __init__(self, partId, partName, countInWOs, avgNumberOfParts):
@@ -9,20 +9,28 @@ class PartsByWorkOrder:
         self.avgNumberOfParts = avgNumberOfParts
 
 mydb = mysql.connector.connect(
-    host="localhost",
+    host="18.191.215.229",
     user="root",
-    passwd="root",
-    database="test_aqua"
+    passwd="SS9wR0qwoPVN",
+    database="aqua"
 )
 
 cursor = mydb.cursor()
 
-def fetchRootSymptomsFromDB():
+def fetchRootSymptomsFromDB(unique_product_id):
     rootSymptoms = []
-    cursor.execute("select * from master_symptoms")
+    cursor.execute('select * from master_symptoms where unique_product_id = ' + "'" + unique_product_id + "' ")
     result = cursor.fetchall()
     for row in result:
         rootSymptoms.append( RootSymptom(row[0], row[1], row[2], row[3], row[4]) )
+    return rootSymptoms
+
+def fetchRootSymptomsForUI(unique_product_id):
+    rootSymptoms = []
+    cursor.execute('select symptom_id, symptom_text from master_symptoms where unique_product_id = ' + "'" + unique_product_id + "' ")
+    result = cursor.fetchall()
+    for row in result:
+        rootSymptoms.append( UIRootSymptom(row[0], row[1]) )
     return rootSymptoms
 
 #Given a set of Symptoms, return the PartId & Num of WOs that it appeared in.

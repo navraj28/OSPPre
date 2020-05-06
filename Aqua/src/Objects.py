@@ -56,3 +56,7 @@ class PartsRecommendation:
         self.probablityPercentage = probablityPercentage
         self.numberOfParts = round(numberOfParts)
         
+class UIRootSymptom:
+    def __init__(self, symptomId, symptomText):
+        self.symptomId = symptomId
+        self.symptomText = symptomText
