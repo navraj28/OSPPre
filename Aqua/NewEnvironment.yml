@@ -35,7 +35,8 @@ dependencies:
   - webencodings=0.5.1=py36_1
   - wheel=0.33.4=py36_0
   - pip:
-    - python==3.6.9
+    - python==3.6
+    - jsonpickle==1.4.1
     - wincertstore==0.2
     - m2w64-gmp==6.1.0
     - winpty==0.4.3
