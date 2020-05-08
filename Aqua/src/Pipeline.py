@@ -1,13 +1,21 @@
 #from USE import get_features, cosineSimilarity
 from USEWithPlaceHolders import get_features, cosineSimilarity
 from DependencyParser import getCoreIssues
-from Objects import WorkOrder, RootSymptom, THRESHOLD, PartsRecommendation
+from Objects import WorkOrder, RootSymptom, THRESHOLD, PartsRecommendation, RemoteSolutions, UIPartsRecommendation
 from SQLHelper import fetchRootSymptomsFromDB, getPartsPredictiction
 import pandas
 import csv
 import numpy as np
 import json
 from pathlib import Path
+import re
+
+def mapSymptomToQuestion(symptom):
+	insensitive = re.compile(re.escape('The'), re.IGNORECASE)
+	str = insensitive.sub("", symptom)
+	insensitive = re.compile(re.escape('iS'), re.IGNORECASE)
+	str = insensitive.sub("", str)
+	return "Is the " + str.strip() + "?"
 
 def mapSymptomsToRootSymptoms(masterList, wo):    
     for symptom in wo.originalSymptoms:
@@ -85,7 +93,7 @@ class PipelineFacade:
             row.append( self.WOs[0].unique_product_id)
             row.append(index)
             row.append(key)
-            row.append("ToDo")
+            row.append(mapSymptomToQuestion(key))
             array = masterList.get(key)
             row.append( array )
             #Store the Vector Value as-well
@@ -136,5 +144,12 @@ def fromProblemDescriptionToPartsPrediction(workOrder):
     pred = getPartsPredictiction(workOrder)
     for part in pred:
         print('Part No. ' + str(part.partId) + ' ' + part.partName + ' Quantity ' + str(part.numberOfParts) + ' PROBABLITY ' + str(part.probablityPercentage) + "%")
-    return pred
-    
+#    return pred
+
+#    jsonStr1 = json.dumps([ob.__dict__ for ob in pred])
+#    rs = [RemoteSolutions()]
+#    jsonStr2 = json.dumps(ob.__dict__ for ob in rs)
+#    dict = {'PartsRecommendations': jsonStr1, 'RemoteSolutions': jsonStr2}
+#    return dict
+    uiPR = UIPartsRecommendation(pred, RemoteSolutions())
+    return uiPR

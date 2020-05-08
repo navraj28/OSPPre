@@ -1,18 +1,21 @@
 import mysql.connector
 import pandas
+from django.core.serializers.json import DjangoJSONEncoder
 
 from Pipeline import fromProblemDescriptionToPartsPrediction
 from Pipeline import RootSymptom
 from Pipeline import WorkOrder
 from USEWithPlaceHolders import get_features, init
 from SQLHelper import getPartsPredictiction, buildSymptomCooccurence, fetchRootSymptomsForUI
-
+from Objects import UIPartsRecommendation, RemoteSolutions
 #from USE import cosineSimilarity
 from sklearn.metrics.pairwise import cosine_similarity
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from collections import namedtuple
 import json
+import jsonpickle
+from django.core.serializers import serialize
 import tensorflow as tf
 import tensorflow_hub as hub
 
@@ -56,8 +59,13 @@ def predictPartsGivenProblemDescription():
 
         workOrder = WorkOrder(x.UniqueProductIdentifier, 'ID', x.ProblemDescription)
         pred = fromProblemDescriptionToPartsPrediction(workOrder)
-        jsonStr = json.dumps([ob.__dict__ for ob in pred])
-        return jsonStr
+#        jsonStr = json.dumps([ob.__dict__ for ob in pred])
+#        return jsonStr
+
+#        return json.dumps(pred)
+#        return jsonify(pred)
+        return jsonpickle.encode(pred)
+#        return serialize('json', pred)
     except ValueError as err:
         jsonStr = json.dumps( str(err) )
         return jsonStr
@@ -73,13 +81,15 @@ def predictPartsGivenSymptoms():
         workOrder.rootSymptomIdsNotPresent = x.SymptomsThatAreNOTPresent
 
         pred = getPartsPredictiction(workOrder)
-        jsonStr = json.dumps([ob.__dict__ for ob in pred])
-        return jsonStr
+#        jsonStr = json.dumps([ob.__dict__ for ob in pred])
+#        return jsonStr
+        uiPR = UIPartsRecommendation(pred, RemoteSolutions())
+        return jsonpickle.encode(uiPR)
     except ValueError as err:
         jsonStr = json.dumps( str(err) )
         return jsonStr
 
-@app.route('/getNextSymptomQuestion', methods=['POST'])
+@app.route('/GetNextSymptomQuestion', methods=['POST'])
 def getNextSymptomQuestion():
     content = request.get_json()
     x = json2obj(request.data)
@@ -110,7 +120,7 @@ def getNextSymptomQuestion():
     jsonStr = json.dumps(ret)
     return jsonStr
 
-@app.route('/getRootSymptoms', methods=['POST'])
+@app.route('/GetRootSymptoms', methods=['POST'])
 def getRootSymptoms():
     try:
         content = request.get_json()

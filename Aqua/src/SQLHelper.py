@@ -186,7 +186,6 @@ def getPartsPredictiction(workOrder):
         percentage = round((partAndWO.countInWOs/totalWOsWithTheseSymptoms)*100)
 
         partRecommendations.append(PartsRecommendation(partAndWO.partId, partAndWO.partName, percentage, partAndWO.avgNumberOfParts))
-
     return partRecommendations
 
 #Given a set of Symptoms, return the PartId & Num of WOs that it appeared in.

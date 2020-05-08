@@ -1,4 +1,6 @@
 #from USE import get_features, cosineSimilarity
+from typing import List
+
 from USEWithPlaceHolders import get_features, cosineSimilarity
 from DependencyParser import getCoreIssues
 import numpy, json
@@ -60,3 +62,12 @@ class UIRootSymptom:
     def __init__(self, symptomId, symptomText):
         self.symptomId = symptomId
         self.symptomText = symptomText
+
+class RemoteSolutions:
+    def __init__(self):
+        self.remoteSolutions = ["Try a reboot.", "Recalibrate the machibe."]
+
+class UIPartsRecommendation:
+    def __init__(self, partsRecommendation, remoteSolutions):
+        self.partsRecommendation = partsRecommendation
+        self.remoteSolutions = remoteSolutions
