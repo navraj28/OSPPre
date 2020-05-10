@@ -1,10 +1,9 @@
 import unittest 
 import pandas
-import csv
 from pathlib import Path
 
 from Pipeline import getUniqueSymptoms, fromProblemDescriptionToPartsPrediction, PipelineFacade
-from Objects import WorkOrder, RootSymptom, PartsRecommendation
+from Objects import WorkOrder, RootSymptom, PartsRecommendation, UIPartsRecommendation
 from USEWithPlaceHolders import init
 
 class TestPipeline(unittest.TestCase): 
@@ -97,7 +96,7 @@ class TestPipeline(unittest.TestCase):
     def test_PartsReccoGivenProblemDescription(self):
         workOrder = WorkOrder('ManufacturerProductFamilyProductLine', 'ID', 'Radiator is leaking and the battery needs to be replaced')
         pred = fromProblemDescriptionToPartsPrediction(workOrder)
-        for part in pred:
+        for part in pred.partsRecommendation:
             if part.partId == 2:
                 self.assertTrue(part.numberOfParts == 2)
                 self.assertTrue(part.probablityPercentage == 50)

@@ -1,5 +1,4 @@
 #from USE import get_features, cosineSimilarity
-from typing import List
 
 from USEWithPlaceHolders import get_features, cosineSimilarity
 from DependencyParser import getCoreIssues

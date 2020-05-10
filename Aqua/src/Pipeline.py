@@ -1,11 +1,9 @@
 #from USE import get_features, cosineSimilarity
 from USEWithPlaceHolders import get_features, cosineSimilarity
-from DependencyParser import getCoreIssues
 from Objects import WorkOrder, RootSymptom, THRESHOLD, PartsRecommendation, RemoteSolutions, UIPartsRecommendation
 from SQLHelper import fetchRootSymptomsFromDB, getPartsPredictiction
 import pandas
 import csv
-import numpy as np
 import json
 from pathlib import Path
 import re

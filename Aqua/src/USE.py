@@ -1,11 +1,6 @@
 import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
-import nltk
-
-import re
-
-import json
 
 # tensroflow hub module for Universal sentence Encoder
 module_url = "https://tfhub.dev/google/universal-sentence-encoder-large/3" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]

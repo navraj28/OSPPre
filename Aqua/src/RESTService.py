@@ -1,23 +1,13 @@
-import mysql.connector
-import pandas
-from django.core.serializers.json import DjangoJSONEncoder
-
 from Pipeline import fromProblemDescriptionToPartsPrediction
-from Pipeline import RootSymptom
 from Pipeline import WorkOrder
 from USEWithPlaceHolders import get_features, init
 from SQLHelper import getPartsPredictiction, buildSymptomCooccurence, fetchRootSymptomsForUI
 from Objects import UIPartsRecommendation, RemoteSolutions
-#from USE import cosineSimilarity
-from sklearn.metrics.pairwise import cosine_similarity
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from collections import namedtuple
 import json
 import jsonpickle
-from django.core.serializers import serialize
-import tensorflow as tf
-import tensorflow_hub as hub
 
 app = Flask(__name__)
 api = Api(app)
