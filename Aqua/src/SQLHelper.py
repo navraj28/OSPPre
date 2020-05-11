@@ -10,8 +10,8 @@ class PartsByWorkOrder:
 
 mydb = mysql.connector.connect(
     host="18.191.215.229",
-    user="root",
-    passwd="SS9wR0qwoPVN",
+    user="app",
+    passwd="osppre",
     database="aqua"
 )
 
