@@ -138,8 +138,11 @@ def fromProblemDescriptionToPartsPrediction(workOrder):
     workOrder.mapToRootSymptoms(rootSymptoms)
     for indx, val in enumerate(workOrder.rootSymptoms) :
         print( val, workOrder.rootSymptomIds[indx])
-    
-    pred = getPartsPredictiction(workOrder)
+
+    if len(workOrder.rootSymptoms)>0:
+        pred = getPartsPredictiction(workOrder)
+    else:
+        pred = []
     for part in pred:
         print('Part No. ' + str(part.partId) + ' ' + part.partName + ' Quantity ' + str(part.numberOfParts) + ' PROBABLITY ' + str(part.probablityPercentage) + "%")
 #    return pred

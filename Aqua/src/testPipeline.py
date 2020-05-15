@@ -111,6 +111,13 @@ class TestPipeline(unittest.TestCase):
             
             print(part.partName, part.probablityPercentage, "%, # of parts ", part.numberOfParts)
 
-if __name__ == '__main__': 
+    def test_PartsReccoGivenProblemDescriptionNegative(self):
+        workOrder = WorkOrder('ManufacturerProductFamilyProductLine', 'ID',
+                              'Abra ca dabra')
+        pred = fromProblemDescriptionToPartsPrediction(workOrder)
+        self.assertTrue( len(pred.partsRecommendation) == 0)
+
+
+if __name__ == '__main__':
     unittest.main() 
     
