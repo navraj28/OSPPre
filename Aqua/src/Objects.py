@@ -64,7 +64,7 @@ class UIRootSymptom:
 
 class RemoteSolutions:
     def __init__(self):
-        self.remoteSolutions = ["Try a reboot.", "Recalibrate the machibe."]
+        self.remoteSolutions = ["Try a reboot.", "Recalibrate the machine."]
 
 class UIPartsRecommendation:
     def __init__(self, partsRecommendation, remoteSolutions):

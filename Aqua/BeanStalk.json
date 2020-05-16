@@ -1,7 +1,8 @@
 {
 	"AWSEBDockerrunVersion": "1",
 	"Image": {
-		"Name": "navraj28/osppre2:latest"
+		"Name": "navraj28/osppre2:latest",
+		"Update": "true"
 	},
 	"Ports": [
 		{"ContainerPort":"5000"}
