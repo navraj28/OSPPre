@@ -1,6 +1,14 @@
 import mysql.connector
+from mysql.connector import pooling
 from Objects import WorkOrder, RootSymptom, PartsRecommendation, UIRootSymptom
 
+connection_pool = mysql.connector.pooling.MySQLConnectionPool(pool_name="Pool",
+                                                              pool_size=5,
+                                                              pool_reset_session=True,
+                                                              host='18.191.215.229',
+                                                              database='aqua',
+                                                              user='app',
+                                                              password='osppre')
 class PartsByWorkOrder:
     def __init__(self, partId, partName, countInWOs, avgNumberOfParts):
         self.partId = partId
@@ -8,30 +16,40 @@ class PartsByWorkOrder:
         self.countInWOs = round(countInWOs)
         self.avgNumberOfParts = avgNumberOfParts
 
-mydb = mysql.connector.connect(
-    host="18.191.215.229",
-    user="app",
-    passwd="osppre",
-    database="aqua"
-)
+def getDBConnection():
+    mydb = connection_pool.get_connection()
+    cursor = mydb.cursor()
 
-cursor = mydb.cursor()
+    return (mydb, cursor)
+
+def closeDBConnection(mydb, cursor):
+    if (mydb.is_connected()):
+        cursor.close()
+        mydb.close()
 
 def fetchRootSymptomsFromDB(unique_product_id):
-    rootSymptoms = []
-    cursor.execute('select * from master_symptoms where unique_product_id = ' + "'" + unique_product_id + "' ")
-    result = cursor.fetchall()
-    for row in result:
-        rootSymptoms.append( RootSymptom(row[0], row[1], row[2], row[3], row[4]) )
-    return rootSymptoms
+    try:
+        mydb, cursor = getDBConnection()
+        rootSymptoms = []
+        cursor.execute('select * from master_symptoms where unique_product_id = ' + "'" + unique_product_id + "' ")
+        result = cursor.fetchall()
+        for row in result:
+            rootSymptoms.append( RootSymptom(row[0], row[1], row[2], row[3], row[4]) )
+        return rootSymptoms
+    finally:
+        closeDBConnection(mydb, cursor)
 
 def fetchRootSymptomsForUI(unique_product_id):
-    rootSymptoms = []
-    cursor.execute('select symptom_id, symptom_text from master_symptoms where unique_product_id = ' + "'" + unique_product_id + "' ")
-    result = cursor.fetchall()
-    for row in result:
-        rootSymptoms.append( UIRootSymptom(row[0], row[1]) )
-    return rootSymptoms
+    try:
+        mydb, cursor = getDBConnection()
+        rootSymptoms = []
+        cursor.execute('select symptom_id, symptom_text from master_symptoms where unique_product_id = ' + "'" + unique_product_id + "' ")
+        result = cursor.fetchall()
+        for row in result:
+            rootSymptoms.append( UIRootSymptom(row[0], row[1]) )
+        return rootSymptoms
+    finally:
+        closeDBConnection(mydb, cursor)
 
 #Given a set of Symptoms, return the PartId & Num of WOs that it appeared in.
 #Used to predict Parts & their Probability
@@ -108,12 +126,17 @@ def buildPartsQuery(workOrder):
         finalSQL = finalSQL + groupByQueryStatic
 
     finalSQL = finalSQL + closingQueryStatic
-    cursor.execute(finalSQL)
-    result = cursor.fetchall()
-    results = []
-    for row in result:
-        results.append( PartsByWorkOrder(row[0], row[1], row[2], row[3]) )
-    return results
+
+    try:
+        mydb, cursor = getDBConnection()
+        cursor.execute(finalSQL)
+        result = cursor.fetchall()
+        results = []
+        for row in result:
+            results.append( PartsByWorkOrder(row[0], row[1], row[2], row[3]) )
+        return results
+    finally:
+        closeDBConnection(mydb, cursor)
 
 #Given a set of Symptoms, find Total Num of WOs that it appeared in.
 #Used to calculate Probability for Parts 
@@ -166,11 +189,15 @@ def buildWOCountQuery(workOrder):
         brackets = 1
     for i in range(len(workOrder.rootSymptomIds) + brackets -1):
         finalSQL = finalSQL + groupByQueryStatic
-    
-    cursor.execute(finalSQL)
-    result = cursor.fetchall()
-    for row in result:
-        return row[0] 
+
+    try:
+        mydb, cursor = getDBConnection()
+        cursor.execute(finalSQL)
+        result = cursor.fetchall()
+        for row in result:
+            return row[0]
+    finally:
+        closeDBConnection(mydb, cursor)
 
 def getPartsPredictiction(workOrder):
     totalWOsWithTheseSymptoms = buildWOCountQuery(workOrder)
@@ -263,12 +290,17 @@ def buildPartsQuery(workOrder):
         finalSQL = finalSQL + groupByQueryStatic
 
     finalSQL = finalSQL + closingQueryStatic
-    cursor.execute(finalSQL)
-    result = cursor.fetchall()
-    results = []
-    for row in result:
-        results.append( PartsByWorkOrder(row[0], row[1], row[2], row[3]) )
-    return results
+
+    try:
+        mydb, cursor = getDBConnection()
+        cursor.execute(finalSQL)
+        result = cursor.fetchall()
+        results = []
+        for row in result:
+            results.append( PartsByWorkOrder(row[0], row[1], row[2], row[3]) )
+        return results
+    finally:
+        closeDBConnection(mydb, cursor)
 
 #Given a Symptom or a Set of Symptoms, find co-occuring Symptoms > than a threshold.
 #Used by Call center agent to quiz the caller. 
@@ -338,15 +370,18 @@ def buildSymptomCooccurence(uniqueProductId, symptomsPresent, symptomsNotPresent
     finalSQL = finalSQL + closingQueryStatic + str(threshold) +  ' order by CountOfSymptoms desc '
 
 #    print(finalSQL)
-    cursor.execute(finalSQL)
-    arraySymptomIds = []
-    arraySymptomText = []    
-    rows = cursor.fetchmany(size=10)
-    for row in rows:
-        arraySymptomIds.append(row[0])
-        arraySymptomText.append(row[1])
+    try:
+        mydb, cursor = getDBConnection()
+        cursor.execute(finalSQL)
+        arraySymptomIds = []
+        arraySymptomText = []
+        rows = cursor.fetchmany(size=10)
+        for row in rows:
+            arraySymptomIds.append(row[0])
+            arraySymptomText.append(row[1])
 
-    tuple = (arraySymptomIds, arraySymptomText)
-    return tuple         
-
+        tuple = (arraySymptomIds, arraySymptomText)
+        return tuple
+    finally:
+        closeDBConnection(mydb, cursor)
 
