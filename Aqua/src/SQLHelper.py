@@ -1,14 +1,20 @@
 import mysql.connector
+import os
 from mysql.connector import pooling
 from Objects import WorkOrder, RootSymptom, PartsRecommendation, UIRootSymptom
+
+DB_HOST = os.environ.get['DB_HOST']
+DATABASE = os.environ.get['DATABASE']
+USER_NAME = os.environ.get['USER_NAME']
+PASSWORD = os.environ.get['PASSWORD']
 
 connection_pool = mysql.connector.pooling.MySQLConnectionPool(pool_name="Pool",
                                                               pool_size=5,
                                                               pool_reset_session=True,
-                                                              host='18.191.215.229',
-                                                              database='aqua',
-                                                              user='app',
-                                                              password='osppre')
+                                                              host=DB_HOST,
+                                                              database=DATABASE,
+                                                              user=USER_NAME,
+                                                              password=PASSWORD)
 class PartsByWorkOrder:
     def __init__(self, partId, partName, countInWOs, avgNumberOfParts):
         self.partId = partId
