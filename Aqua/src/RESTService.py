@@ -5,11 +5,14 @@ from SQLHelper import getPartsPredictiction, buildSymptomCooccurence, fetchRootS
 from Objects import UIPartsRecommendation, RemoteSolutions
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
+from flask_cors import CORS, cross_origin
 from collections import namedtuple
 import json
 import jsonpickle
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 api = Api(app)
 
 THRESHOLD_FOR_COOCCURENCE = 1
@@ -18,6 +21,7 @@ def _json_object_hook(d): return namedtuple('X', d.keys())(*d.values())
 def json2obj(data): return json.loads(data, object_hook=_json_object_hook)
 
 @app.route('/PredictPartsGivenProblemDescription', methods=['POST'])
+@cross_origin()
 def predictPartsGivenProblemDescription():
     try:
         content = request.get_json()
@@ -37,6 +41,7 @@ def predictPartsGivenProblemDescription():
         return jsonStr
 
 @app.route('/PredictPartsGivenSymptoms', methods=['POST'])
+@cross_origin()
 def predictPartsGivenSymptoms():
     try:
         content = request.get_json()
@@ -56,6 +61,7 @@ def predictPartsGivenSymptoms():
         return jsonStr
 
 @app.route('/GetNextSymptomQuestion', methods=['POST'])
+@cross_origin()
 def getNextSymptomQuestion():
     content = request.get_json()
     x = json2obj(request.data)
@@ -87,6 +93,7 @@ def getNextSymptomQuestion():
     return jsonStr
 
 @app.route('/GetRootSymptoms', methods=['POST'])
+@cross_origin()
 def getRootSymptoms():
     try:
         content = request.get_json()
