@@ -3,10 +3,10 @@ import os
 from mysql.connector import pooling
 from Objects import WorkOrder, RootSymptom, PartsRecommendation, UIRootSymptom
 
-DB_HOST = os.environ.get['DB_HOST']
-DATABASE = os.environ.get['DATABASE']
-USER_NAME = os.environ.get['USER_NAME']
-PASSWORD = os.environ.get['PASSWORD']
+DB_HOST = os.getenv('DB_HOST', '18.191.215.229')
+DATABASE = os.getenv('DATABASE', 'aqua')
+USER_NAME = os.getenv('USER_NAME', 'app')
+PASSWORD = os.getenv('PASSWORD', 'osppre')
 
 connection_pool = mysql.connector.pooling.MySQLConnectionPool(pool_name="Pool",
                                                               pool_size=5,
