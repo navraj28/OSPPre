@@ -3,7 +3,7 @@ from Pipeline import WorkOrder
 from USEWithPlaceHolders import get_features, init
 from SQLHelper import getPartsPredictiction, buildSymptomCooccurence, fetchRootSymptomsForUI
 from Objects import UIPartsRecommendation, RemoteSolutions
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_restful import Resource, Api
 from flask_cors import CORS, cross_origin
 from collections import namedtuple
@@ -105,6 +105,25 @@ def getRootSymptoms():
     except ValueError as err:
         jsonStr = json.dumps( str(err) )
         return jsonStr
+
+@app.route('/')
+def main():
+    return render_template('home.html')
+
+@app.route("/OSPPre")
+def index():
+    api_variable = 'ManufacturerProductFamilyProductLine'
+    url = 'http://Osppre-Test.eba-vi3z5hvq.us-east-2.elasticbeanstalk.com'
+    caseid = '567896789'
+    productType = 'Molecular Diagnostics'
+    manufacturer = 'Johnson Medical'
+    productNumber = 'Quantum 3300'
+    return render_template('index.html', variable=api_variable,
+                            api_url = url,
+                            case_id=caseid,
+                            product_type=productType,
+                            Manufacturer=manufacturer,
+                            product_number=productNumber)
 
 if __name__ == '__main__':
     init()

@@ -1,0 +1,162 @@
+body {
+  background : black!important;
+}
+
+
+#panel-1, #panel-2, #panel-3 {
+  background-color: black!important;
+  border-color: black!important;
+}
+
+#horizontal-1, #horizontal-2 {
+  color: white;
+  border-style: outset;
+  background-color: black;
+  padding: 5px 0 0 0;
+  margin-top: 10px;
+}
+
+
+#class-id {
+  color: white;
+}
+
+.container {
+  padding: 10px 10px 20px 20px;
+}
+
+#btn-1{
+  margin:0px 20px 0px 100px;
+  align-content: stretch;
+}
+
+#btn-2{
+  margin:0px 20px 0px 0px;
+  align-content: stretch;
+}
+
+#panel-1, #panel-2, #panel-3 {
+  align-content: center;
+  padding: 0px 0 0px 0px;
+  max-height: 380px;
+  min-height: 380px;
+  background-color: black!important;
+  border-style: solid;
+  border-color: black!important;
+}
+.list-group-item {
+  background: black!important;
+  color: white!important;
+  border: 0!important;
+}
+.panel-heading {
+  background-color: gray;
+  margin: 5px 5px 5px 5px;
+}
+
+#slideContainer {
+  color: white;
+}
+
+
+
+#myInput {
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  padding: 8px 12px 8px 20px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myUL {
+  list-style-type: none;
+  padding: 0 0 10px 0;
+  margin: 0;
+}
+
+#myUL li a {
+  border: 1px;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px 0 12px 0;
+  text-decoration: none;
+  color: black;
+  display: block;
+}
+
+#myUL li a:hover:not(.header) {
+  background-color: #eee;
+}
+
+.panel-default > .panel-heading {
+  background-color: gray!important;
+  color: white!important;
+}
+
+.panel-default > .panel-body {
+  background-color: black!important;
+  color: white!important;
+  text-decoration-color: white!important;
+}
+
+.list-group {
+  color: black!important;
+}
+
+
+#myInput {
+  color: black!important;
+}
+
+
+#circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: #fff;
+  line-height: 50px;
+  text-align: center;
+  background: #000;
+  border-style: solid;
+  border-color: white;
+}
+
+.panel {
+  background-color: black!important;
+  border: 0!important;
+}
+.panel-body {
+  background-color: black!important;
+  border: 0!important;
+}
+
+.card {
+  background: black!important;
+  color: white;
+  border-color: white;
+}
+
+#problems-modal  * {
+  padding: 5px 0 5px 10px;
+}
+
+#panels .row {
+  color: white;
+  border-style: outset;
+  background-color: black;
+  padding: 10px 10px 100px 10px;
+  margin-top: 0px;
+
+}
+
+#api_var1, #api_url {
+  display: None;
+}
+
+#btn-3 {
+  padding: 1px 1px 1px 1px;
+  margin: 0 0 0 0;
+  background-color: gray!important;
+  border-color: gray;
+}

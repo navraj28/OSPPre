@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>OSPPre</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</head>
+
+<body onload="myFunction()">
+  <var class="api_var1" id="api_var1">{{ variable }}</var>
+  <var id="api_url">{{ api_url }}</var>
+  <section>
+    <div class="container" id="horizontal-1">
+      <div class="row">
+        <div class="col-2" style="margin-left:20px;">
+          <img id ="logo" src="{{ url_for('static', filename='Logo.png') }}" alt="logo" height="100" width="100">
+        </div>
+        <div class="col-1">
+
+        </div>
+        <div class="col-6">
+          <h3>OSPPre-Open Source Parts Prediction</h3>
+            <h3>Powered by spaCy & Tensorflow Hub
+          </h3>
+        </div>
+      </div>
+      </div>
+  </section>
+
+  <section>
+    <div class="container" id="horizontal-2">
+      <div class="row">
+        <div class="col-3">
+          <h4 style="margin-left:20px;">Case id: <span id="class-id">{{ case_id }}</span></h4>
+        </div>
+        <div class="col-3">
+          <h4>First Time Fix: <span id="class-time">75%</span></h4>
+        </div>
+        <div class="col-2">
+
+        </div>
+        <div class="col-sm-4">
+          <button type="button" onclick="modal_fn()" class="btn btn-primary" id="btn-1" data-toggle="modal" data-target="#ModalCenter">Resolved</button>
+          <button type="button" onclick="modal_fn()" class="btn btn-primary" id="btn-2" data-toggle="modal" data-target="#ModalCenter">Save</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container" id="panels">
+      <div class="row">
+        <div class="col-sm-4" id="panel-1">
+          <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse1">Product Information</a>
+              </h4>
+              </div>
+              <div class = "panel-body" id="product-body">
+                <div id="collapse1" class="panel-collapse collapse in">
+                  <ul class="list-group">
+                    <li class="list-group-item"><p>Product Type</p><h4><strong>{{ product_type }}</strong></h4></li>
+                    <li class="list-group-item"><p>Manufacturer</p><h4><strong>{{ Manufacturer }}</strong></h4></li>
+                    <li class="list-group-item"><p>Product Number</p><h4><strong>{{ product_number }}</strong></h4></li>
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+        </div>
+      </div>
+        <div class="col-sm-4" id="panel-2">
+          <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading"><b>Questions</b> <span style="position:absolute; right:50px;"><button class="btn btn-primary" id="btn-3" onclick="myFunction()">Clear all</button></span></div>
+            <div class="panel-body">
+
+              <i class='far fa-comment' style='font-size:24px'></i>
+                <span id="question"><strong style="font-size:16px">What is the Problem?</strong></span>
+              <div id="slidecontainer"></div>
+              <div id ="searchBar">
+              <input onfocus="this.value=''" style="font-family: FontAwesome;" type="text" id="myInput" onkeyup="search()" placeholder="&#xf002; Search for names.."
+               title="Type in a name">
+             </div>
+               <div id="myUL">
+                 <div class="spinner-border" role="status"><span class="sr-only">'+"Loading..."+'</span></div>
+                <!-- Javascrpt list -->
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="col-sm-4" id="panel-3">
+          <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading"><b>Solutions</b></div>
+            <div id="remote-solutions" style="background-color:black!important; color:white!important;padding:10px 0 10px 10px;">
+
+            </div>
+            <div class="panel-body" id="solutions">
+              <span class="badge" style="height: 20px;background-color:blue!important;">__%</span>
+              <strong  style="font-size:16px;padding-left: 10px;">Fill in questions for solutions..</strong>
+
+            </div>
+
+          </div>
+        </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+  <section>
+    <!-- Modal -->
+    <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title" id="exampleModalLongTitle"><strong>Analysis Details</strong></h1>
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <h4 style="margin-left:2%"><strong>Case id:</strong> {{ case_id }}</h4>
+          <div class="modal-body">
+            <div class="card-group">
+                <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title"><strong>Product Details</strong></h3>
+                  <div class="card-text" id="product-modal">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</div>
+                </div>
+                </div>
+                <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title"><strong>Problems Detected</strong></h3>
+                  <div class="card-text" id="problems-modal">This card has supporting text below as a natural lead-in to additional content.</div>
+                </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                      <h3 class="card-title"><strong>Solutions</strong></h3>
+                      <div class="card-text" id="solutions-modal">This card has supporting text below as a natural lead-in to additional content.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+
+                      <div class="card-text" id="remote-modal">This is a wider.</div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </body>
+
+
+</html>
