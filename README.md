@@ -1,6 +1,7 @@
 # OSPPre (Open Source Parts Prediction), largely inspired by Aquant.io's Smart Triage & Parts Prediction
-[A short read-up on Medium is here.](https://medium.com/@navraj28/parts-prediction-given-the-problem-description-6767c3d7e8ed) 
+[A short write-up on Medium is here.](https://medium.com/@navraj28/parts-prediction-given-the-problem-description-6767c3d7e8ed) 
 The Wiki has some additional insights.
+[A short write-up on Linked-in with a Demo video.](https://www.linkedin.com/pulse/meet-osppre-naveen-rajan/?trackingId=GikiBxsgFXN6REX%2FelCgMg%3D%3D)
 
 ## Installation
 	Install the Anaconda Environment via AnacondaEnvironment.yml
